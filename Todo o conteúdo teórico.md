@@ -73,11 +73,14 @@ Em um escalonador não preeptivo a tarefa em execução não pode ser interrompi
 
 ### Suficiente
 + O teste suficiente verifica se o sistema é escalonavel através de testes simples de escalonamento.
+
 + **Teste de Utilização**
+	
 	+ > $Ub=\sum \frac{Ci}{Ti}$
 	+ > $Ub < n(2^{-1}-1)$
 	+ > $\lim_{n \to \infty}\frac{Ci}{Ti} = Log(2) = 0.693$
-+ **Hyperbolic Bound** 
++ **Hyperbolic Bound**
+
 	+ > $\prod (Ui +1) < 2$
 
 ### Exato
@@ -380,3 +383,7 @@ O escalonamento de tempo real para multicores ainda nao é muito utilizado pois,
 ║         ║      WF     ║    G-EDF    ║ [G-EDF] t3 t6  ║
 ╚═════════╩═════════════╩═════════════╩════════════════╝
 ```
+
+---
+
+**Copyright &copy; 2019, Paulo Victor Duarte, All rights reserved.**
