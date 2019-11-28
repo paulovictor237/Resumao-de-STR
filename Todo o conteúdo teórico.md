@@ -57,8 +57,8 @@ O que um **RTOS** deve garantir
 7. $Jitter$: tempo perdido para a troca de contexto entre uma saída de tarefa em execução e o início da outra
    
 ### Deadlines
-1. Deadline Relativo:  em relação ao início da tarefa ( Concluir em 10 ms )
-2. Deadline Absoluto: em relação à linha do tempo ( Concluir até as 10:00:00 )
+1. $ Di $: Deadline Relativo, em relação ao início da tarefa ( Concluir em 10 ms )
+2. $ di $: Deadline Absoluto, em relação à linha do tempo ( Concluir até as 10:00:00 )
 
 ### Formulas
 Tempo de resposta = $fi-ai$
@@ -72,10 +72,26 @@ Em um escalonador não preeptivo a tarefa em execução não pode ser interrompi
 ## Testes
 
 ### Suficiente
-+ O teste suficiente verifica se o sistema é escalonavel por teste de utilização.
++ O teste suficiente verifica se o sistema é escalonavel através de testes simples de escalonamento.
++ **Teste de Utilização**
+	+ > $Ub=\sum \frac{Ci}{Ti}$
+	+ > $Ub < n(2^{-1}-1)$
+	+ > $\lim_{n \to \infty}\frac{Ci}{Ti} = Log(2) = 0.693$
++ **Hyperbolic Bound** 
+	+ > $\prod (Ui +1) < 2$
 
 ### Exato
 + O teste exato verifica com algorítmo RTA de forma exata se o sistema é escalonável
++ **Teste de RTA** 
+	+ Analisa a maior interferência que a tarefa pode sofrer pelo sistema
+	+ A propriedade de teto ( $\left \lceil \ X \right \rceil$ ), deve ser arredondado para o próximo número inteiro.
+	+ Ex: $\left \lceil \ 1,06 \right \rceil = 2$
+	> $R1^{0} = C1$
+	> $R2^{0} = C1 + C2$
+	> $R2^{1} = \left \lceil \frac{R2^{0}}{T1} \right \rceil C1 + C2$
+	> $R3^{0} = C1 + C2 + C3$
+	> $R3^{1} = \left \lceil \frac{R3^{0}}{T1} \right \rceil C1 + \left \lceil \frac{R3^{0}}{T2} \right \rceil C2 + C3$
+	> $R3^{2} = \left \lceil \frac{R3^{1}}{T1} \right \rceil C1 + \left \lceil \frac{R3^{1}}{T2} \right \rceil C2 + C3$
 
 ### Necessário
 + O teste Necessário verifica em condições reais a escalonabilidade, pois há casos que o sistema é escalonavel mas não há como provar.
@@ -144,32 +160,16 @@ Ferramentas necessárias para criar um executivo cíclico
 ```
 
 ### Rate Monotonic (RM)
-+ Prioridade mais alta para a tarefa com o menor período
++ Prioridade mais alta para a tarefa com o menor período $(Ti)$
 + Prioridade fixa
-+ **Teste suficiente** 
-	+ **Teste de utilização**
-		>$Ub=\sum \frac{Ci}{Ti}$
-		> $Ub < n(2^{-1}-1)$
-		> $\lim_{n \to \infty}\frac{Ci}{Ti} = Log(2) = 0.693$
-	+ **Hyperbolic bound** 
-		
-		> $\prod (Ui +1) < 2$
-+ **Teste de RTA** (Exato)
-	+ Analisa a maior interferência que a tarefa pode sofrer pelo sistema
-	+ A propriedade de teto ( $\left \lceil \ X \right \rceil$ ), deve ser arredondado para o próximo número inteiro.
-	+ Ex: $\left \lceil \ 1,06 \right \rceil = 2$
-			> $R1^{0} = C1$
-			> $R2^{0} = C1 + C2$
-			> $R2^{1} = \left \lceil \frac{R2^{0}}{T1} \right \rceil C1 + C2$
-			> $R3^{0} = C1 + C2 + C3$
-			> $R3^{1} = \left \lceil \frac{R3^{0}}{T1} \right \rceil C1 + \left \lceil \frac{R3^{0}}{T2} \right \rceil C2 + C3$
-			> $R3^{2} = \left \lceil \frac{R3^{1}}{T1} \right \rceil C1 + \left \lceil \frac{R3^{1}}{T2} \right \rceil C2 + C3$
++ Teste suficiente (Utilização e Hyperbolic Bound)
++ Teste exato (RTA)
 
 ### Deadline Monotonic (DM)
-+ Prioridade mais alta para a tarefa com o menor deadline relativo
++ Prioridade mais alta para a tarefa com o menor deadline relativo $(Di)$
 + Quanto menor o deadline, maior a prioridade.
 + Prioridade fixa
-+ Igual o RM quando (T=D)
++ Igual o RM quando $Ti=Di$
 
 ## Abordagens de prioridade dinâmica (Dynamic Priority )
 
