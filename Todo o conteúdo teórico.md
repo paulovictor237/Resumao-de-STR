@@ -61,9 +61,9 @@ O que um **RTOS** deve garantir
 2. Deadline Absoluto: em relação à linha do tempo ( Concluir até as 10:00:00 )
 
 ### Formulas
-Tempo de conclusão = $fi-ai$
 Tempo de resposta = $fi-ai$
-Tempo de atraso (latness) = $fi-di$
+Tempo de atraso ( + Slack) = $fi-di$
+Tempo de atraso ( - Lateness) = $fi-di$
 
 ## Definição de preemptivo e não preemptivo
 Um escalonador é considerado preemptivel se a execução de uma tarefa pode ser arbitrariamente suspensa a qualquer momento para atribuir a CPU à outra tarefa.
@@ -119,7 +119,7 @@ Só funciona para tarefas periódicas e análise off-line.
 + O tempo é dividido em intervalos iguais (Slots)
 + Cada tarefa é alocada em um Slot para atender a solicitação desejada
 + O Slot de execução é acionado por um timer
-  
+
 Ferramentas necessárias para criar um executivo cíclico
 1. Interrupção
 2. Laço FOR
@@ -148,30 +148,36 @@ Ferramentas necessárias para criar um executivo cíclico
 + Prioridade fixa
 + **Teste suficiente** 
 	+ **Teste de utilização**
-		$Ub=\sum \frac{Ci}{Ti}$
-		$Ub < n(2^{-1}-1)$
-		$\lim_{n \to \infty}\frac{Ci}{Ti} = Log(2) = 0.693$
+		>$Ub=\sum \frac{Ci}{Ti}$
+		> $Ub < n(2^{-1}-1)$
+		> $\lim_{n \to \infty}\frac{Ci}{Ti} = Log(2) = 0.693$
 	+ **Hyperbolic bound** 
-		$\prod (Ui +1) < 2$
-+ **Teste de RTA**
-		Analisa a maior interferência que a tarefa pode sofrer pelo sistema
-		$R1^{0} = C1$
-		$R2^{0} = C1 + C2$
-		$R2^{1} = \left \lceil \frac{R2^{0}}{T1} \right \rceil C1 + C2$
-		$R3^{0} = C1 + C2 + C3$
-		$R3^{1} = \left \lceil \frac{R3^{0}}{T1} \right \rceil C1 + \left \lceil \frac{R3^{0}}{T2} \right \rceil C2 + C3$
-		$R3^{2} = \left \lceil \frac{R3^{1}}{T1} \right \rceil C1 + \left \lceil \frac{R3^{1}}{T2} \right \rceil C2 + C3$
+		
+		> $\prod (Ui +1) < 2$
++ **Teste de RTA** (Exato)
+	+ Analisa a maior interferência que a tarefa pode sofrer pelo sistema
+	+ A propriedade de teto ( $\left \lceil \ X \right \rceil$ ), deve ser arredondado para o próximo número inteiro.
+	+ Ex: $\left \lceil \ 1,06 \right \rceil = 2$
+			> $R1^{0} = C1$
+			> $R2^{0} = C1 + C2$
+			> $R2^{1} = \left \lceil \frac{R2^{0}}{T1} \right \rceil C1 + C2$
+			> $R3^{0} = C1 + C2 + C3$
+			> $R3^{1} = \left \lceil \frac{R3^{0}}{T1} \right \rceil C1 + \left \lceil \frac{R3^{0}}{T2} \right \rceil C2 + C3$
+			> $R3^{2} = \left \lceil \frac{R3^{1}}{T1} \right \rceil C1 + \left \lceil \frac{R3^{1}}{T2} \right \rceil C2 + C3$
 
 ### Deadline Monotonic (DM)
 + Prioridade mais alta para a tarefa com o menor deadline relativo
-+ prioridade fixa
-+ igual o RM quando (D=P)
++ Quanto menor o deadline, maior a prioridade.
++ Prioridade fixa
++ Igual o RM quando (T=D)
 
 ## Abordagens de prioridade dinâmica (Dynamic Priority )
 
 ### Earliest Deadline First (EDF)
 + Prioridade inversamente proporcional ao deadline absoluto
-+ Ótimo em relação aos critérios de prioridade variáveis
++ A tarefas que estiver com seu deadline mais próximo de termiar é priorizada.
++ Não é utilizado em sistemas críticos, pois seu **comportamento é imprevisível**. Sistemas críticos utilizam RM, DM e Executivo cíclico.
++ Ótimo em relação aos critérios de prioridade variáveis. Se o EDF não conseguir escalonar, nenhum outro alroítmo irá conseguir.
 + Teste suficiente $Ub=\sum \frac{Ci}{Ti} < 1$
 
 ### Least Slack Fisrt (LSF)
@@ -182,7 +188,9 @@ Ferramentas necessárias para criar um executivo cíclico
 + Tarefas em Ready aumentam a prioridade
 + 
 ## RM x EDF
-+ RM é mais fácil de implementar
++ RM é previsível.
++ RM é mais fácil de implementar, basta fixar prioridades. O EDF precisa recalcular a prioridade durante a execução.
++ Se o sistema está sobrecarregado, o RM garante que as tarefas de maiores pioridades serão pouco afetadas.
 + Há mais testes de análise necessária
 + Melhor de entender se algo der errado (Ex: Overloads)
 
@@ -192,12 +200,12 @@ Ferramentas necessárias para criar um executivo cíclico
 1. Sempre deve ser garantido os deadlines
 2. O que sobra é fornecido aos servidores Aperiódicos
 3. Os jobs aperiódicos são executados em fila pelo servidor
+4. Duas filas de processos no escalonador ( Periodicas e Aperioficas )
 
 ## Background Server (BS)
 + Só permite a execução de tarefas aperiodicas se não houver nenhuma outra tarefa periódica em execução. Opera em espaços livres.
 + Executa enquanto o processador estiver em idle
 + Apenas para tarefas aperiodicas sem restrição de tempo.
-+ Duas filas de processos ( Periodicas e Aperioficas )
 + Teste de escalonabilidade : RTA
 
 ## Poolling Server (PS)
@@ -222,8 +230,8 @@ Ferramentas necessárias para criar um executivo cíclico
 + Possui um período $ Ti$ e um tempo de execução $Ci$ (Carga do Budget)
 + Preserva a capacidade e difere na forma como é feita a recarga
 + Para determinar a Recarga são feitas duas perguntas 
-  + Quando? :  A recarga ocorre em $RT=Ti+Ts$  e $Ts$ é onde a tarefa foi iniciada.
-  + Quanto? :   A recarga fornecida é a mesma utilizada pela tarefa até sua conclusão.
+  + $(RT)$ Quando? :  A recarga ocorre em $RT=Ti+Ts$  e $Ts$ é onde a tarefa foi iniciada.
+  + $(RA)$ Quanto? :   A recarga fornecida é a mesma utilizada pela tarefa até sua conclusão.
 + Teste de escalonabilidade : RTA ou  $Us\leq 2(\frac{Up}{n}+1)^{-n}-1$
 
 # Acesso a Sessões críticas
@@ -235,23 +243,29 @@ Ferramentas necessárias para criar um executivo cíclico
 ## Non Preemptive Protocol (NPP)
 + Aumenta a prioridade dinâmica de uma tarefa em execução que utilize um recurso compartilhado (região crítica).
 + Evita o problema da inversão de prioridades
-+ Causa bloqueio desnecessário:  Uma tarefa está bloqueando o uso da CPU por operar na região critica, enquanto tarefas de maior prioridade ficam bloqueadas mesmo não usando o recurso.
 + Qualquer tarefa pode ser bloqueada por uma de menor prioridade.
++ Causa bloqueio desnecessário:  Uma tarefa está bloqueando o uso da CPU por operar na região critica, enquanto tarefas de maior prioridade ficam bloqueadas mesmo não usando o recurso.
++ Outro problema do NPP é que para ser implementado é necessário desabilitar as interrupções. Neste caso não há como tarefas de maior prioridade preeptarem o processo durante um acesso a região crítica.
 
 ## Priority inheritance Protocol (PIP)
 + Herança de prioridade. A tarefa de maior prioridade herda a de maior prioridade
 + A inversão de prioridade descontrolada é evitada.
 + Não impede **DEADLOCKS**
 + A prioridade só é aumentada durante a região crítica
-+ Propriedade transitiva ( se t2 aumentar a prioridade, t3 também aumenta.
++ Propriedade transitiva ( se t2 aumentar a prioridade, t3 também aumenta).
++ Possui prioridade Ativa e Nominal
+	+ Prioridade Ativa (p): definida durante a execução.
+	+ Priorudade Nominal (P): definida em tempo de projeto.
 + Tipos de bloqueio
   + Direto: t2 bloqueia t1
   + Transitivo: t3 bloqueia t1,  e também bloqueia t2 por herança de prioridade
 
 ## Priotity Ceiling Protocol (PCP)
-+ Elimina a possibilidade de ocorrer **DEADLOCKS**
 + No PCP a herança é dada quando uma tarefa de maior prioridade é bloqueada. 
++ Elimina a possibilidade de ocorrer **DEADLOCKS**
 + Ceiling C(Sk) prioridade C no Semáforo do recurso K
++ O valor de C(Sk) é o mesmo da tarefa de maior prioridade que utiliza o recurso K.
++ O Ceiling é conhecido antes de o programa começar a executar. É estático e nunca muda.
 + A prioridade tem que ser maior que a C, para receber a vez de execução.
 + Se $Pi\leq C(Sk)$  o acesso é negado.
 + Assume-se que se sabe quais recursos cada tarefa precisa
@@ -265,8 +279,8 @@ Ferramentas necessárias para criar um executivo cíclico
 + Quem tem o recurso é ativado se não existir uma tarefa de prioridade maior
 
 ## Immediate priority ceiling protocol (IPCP)
++ No IPCP a herança é dada IMEDIATAMENTE no início da sessão critica
 + A tarefa bloqueia imediatamente quando possui o recurso e executa com prioridade de teto
-+ No IPCP a herança é dada no início da sessão critica
 + A tarefa $tj$ só é bloqueada pela tarefa $ti$ se $Pj<Pi\leqslant C(Sk)$
 + O bloqueio máximo é o mesmo do PCP
 + Tipos de bloqueio
@@ -290,8 +304,8 @@ Quando implementamos um protocolo de segurança para o acesso a regiões crític
 > $R3^{1} = \left \lceil \frac{R3^{0}}{T1} \right \rceil C1 + \left \lceil \frac{R3^{0}}{T2} \right \rceil C2 + C3 + B3$
 > $R3^{2} = \left \lceil \frac{R3^{1}}{T1} \right \rceil C1 + \left \lceil \frac{R3^{1}}{T2} \right \rceil C2 + C3 + B3$
 
-
 # Multiprocessadores
+O escalonamento de tempo real para multicores ainda nao é muito utilizado pois, o barramento e a memória  principal são compartilhados entre os processadores. A solução é isolar todos os elementos compartilhados, mas isso exige um alto grau de complexidade. Atualmente o isolamento é feito via software pelo sistema operacional, mas é esperado que no futuro isso seja aplicado pelo hardware.
 
 ## Parcionado
 + Costuma ser o mais usual devido a maior previsibilidade. Cada processador escalona as tarefas como um uniprocessador.
@@ -299,7 +313,7 @@ Quando implementamos um protocolo de segurança para o acesso a regiões crític
 + Cada processador possui uma fila própria
 + Teste de escalonabilidade individual
 + Não há migração entre os processadores
-+ Bin Packing heuristic
++ **Bin Packing**
   + First-Fit: Atribuir a tarefa ao primeiro processador com espaço livre. 
   + Best-Fi: Atribuir a tarefa aos processadores que tem o menor espaço de utilização sobrando
   + Worst-fit: Atribuir a tarefa ao processador que tem o maior espaço de utilização sobrando
