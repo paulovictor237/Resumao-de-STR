@@ -72,7 +72,7 @@ Em um escalonador não preeptivo a tarefa em execução não pode ser interrompi
 ## Testes
 
 ### Suficiente
-+ O teste suficiente verifica se o sistema é escalonavel através de testes simples de escalonamento.
++ O teste suficiente verifica se o sistema é escalonável através de testes simples de escalonamento.
 
 + **Teste de Utilização**
 	
@@ -84,8 +84,9 @@ Em um escalonador não preeptivo a tarefa em execução não pode ser interrompi
 	+ > $\prod (Ui +1) < 2$
 
 ### Exato
-+ O teste exato verifica com algorítmo RTA de forma exata se o sistema é escalonável
++ O teste exato verifica com algoritmo RTA de forma exata se o sistema é escalonável
 + **Teste de RTA** 
+	
 	+ Analisa a maior interferência que a tarefa pode sofrer pelo sistema
 	+ A propriedade de teto ( $\left \lceil \ X \right \rceil$ ), deve ser arredondado para o próximo número inteiro.
 	+ Ex: $\left \lceil \ 1,06 \right \rceil = 2$
@@ -97,7 +98,7 @@ Em um escalonador não preeptivo a tarefa em execução não pode ser interrompi
 	> $R3^{2} = \left \lceil \frac{R3^{1}}{T1} \right \rceil C1 + \left \lceil \frac{R3^{1}}{T2} \right \rceil C2 + C3$
 
 ### Necessário
-+ O teste Necessário verifica em condições reais a escalonabilidade, pois há casos que o sistema é escalonavel mas não há como provar.
++ O teste Necessário verifica em condições reais a escalonabilidade, pois há casos que o sistema é escalonável mas não há como provar.
 
 ## Escalonadores de tempo real
 + Best effort
@@ -135,6 +136,7 @@ Já foi usado em sistemas militares, navegação e monitoramento de sistemas.
 Só funciona para tarefas periódicas e análise off-line.
 **Vantagem**: comportamento conhecido.
 **Desvantagem**: Escalonamento muito rígido, grade muito grande.
+
 + O tempo é dividido em intervalos iguais (Slots)
 + Cada tarefa é alocada em um Slot para atender a solicitação desejada
 + O Slot de execução é acionado por um timer
@@ -178,7 +180,7 @@ Ferramentas necessárias para criar um executivo cíclico
 
 ### Earliest Deadline First (EDF)
 + Prioridade inversamente proporcional ao deadline absoluto
-+ A tarefas que estiver com seu deadline mais próximo de termiar é priorizada.
++ A tarefas que estiver com seu deadline mais próximo de terminar é priorizada.
 + Não é utilizado em sistemas críticos, pois seu **comportamento é imprevisível**. Sistemas críticos utilizam RM, DM e Executivo cíclico.
 + Ótimo em relação aos critérios de prioridade variáveis. Se o EDF não conseguir escalonar, nenhum outro alroítmo irá conseguir.
 + Teste suficiente $Ub=\sum \frac{Ci}{Ti} < 1$
@@ -193,7 +195,7 @@ Ferramentas necessárias para criar um executivo cíclico
 ## RM x EDF
 + RM é previsível.
 + RM é mais fácil de implementar, basta fixar prioridades. O EDF precisa recalcular a prioridade durante a execução.
-+ Se o sistema está sobrecarregado, o RM garante que as tarefas de maiores pioridades serão pouco afetadas.
++ Se o sistema está sobrecarregado, o RM garante que as tarefas de maior prioridade serão pouco afetadas.
 + Há mais testes de análise necessária
 + Melhor de entender se algo der errado (Ex: Overloads)
 
@@ -203,7 +205,7 @@ Ferramentas necessárias para criar um executivo cíclico
 1. Sempre deve ser garantido os deadlines
 2. O que sobra é fornecido aos servidores Aperiódicos
 3. Os jobs aperiódicos são executados em fila pelo servidor
-4. Duas filas de processos no escalonador ( Periodicas e Aperioficas )
+4. Duas filas de processos no escalonador ( Periodicas e Aperiodicas )
 
 ## Background Server (BS)
 + Só permite a execução de tarefas aperiodicas se não houver nenhuma outra tarefa periódica em execução. Opera em espaços livres.
@@ -216,7 +218,7 @@ Ferramentas necessárias para criar um executivo cíclico
 + Possui um período $ Ti$ e um tempo de execução $Ci$ (Carga do Budget)
 + No pior caso a interferência do PS no sistema é igual a uma tarefa periódica
 + No período da chegada de uma tarefa aperiódica, mesmo que reste tempo para sua execução, ela só irá iniciar sua execução no próximo período.
-+ Server Budget:  Recarga ocorre a cada período apenas se houver jobs aperiodicos..
++ Server Budget:  Recarga ocorre a cada período apenas se houver jobs aperiodicos.
 + Teste de escalonabilidade : RTA ou  $Us\leq 2(\frac{Up}{n}+1)^{-n}-1$
 
 ## Deferable Server (DS)
@@ -224,7 +226,7 @@ Ferramentas necessárias para criar um executivo cíclico
 + Não possui o mesmo comportamento de uma tarefa periódica
   + Nem sempre executa no seu tempo de chegada mesmo com maior prioridade
 + A tarefa é iniciada imediatamente dentro do período em que ocorreu.
-+ Server Budget:  Recarga ocorre a cada período, mesmo quando não existem jobs aperiodicos.
++ Server Budget:  Recarga ocorre a cada período, mesmo quando não existem jobs aperiódicos.
 + Teste de escalonabilidade : RTA ou  $Us\leq  \frac{2-k}{2k-1}$ e $K=(\frac{Up}{n}+1)^{n}$
 
 ## Sporadic Server (SS)
@@ -258,7 +260,7 @@ Ferramentas necessárias para criar um executivo cíclico
 + Propriedade transitiva ( se t2 aumentar a prioridade, t3 também aumenta).
 + Possui prioridade Ativa e Nominal
 	+ Prioridade Ativa (p): definida durante a execução.
-	+ Priorudade Nominal (P): definida em tempo de projeto.
+	+ Prioridade Nominal (P): definida em tempo de projeto.
 + Tipos de bloqueio
   + Direto: t2 bloqueia t1
   + Transitivo: t3 bloqueia t1,  e também bloqueia t2 por herança de prioridade
@@ -292,7 +294,7 @@ Ferramentas necessárias para criar um executivo cíclico
   + Teto: O recurso de t1 está livre, mas mesmo assim ela é bloqueada por t3  por prioridade de Ceiling (teto).
 
 # Teste de escalonabilidade para $Bi$
-Quando implementamos um protocolo de segurança para o acesso a regiões críticas cada tarefa terá um tempo quem que permanece bloqueada ($Bi$). Neste caso, utilizamos os algoritmos abaixo para verificar se o sistema é escalonavel.
+Quando implementamos um protocolo de segurança para o acesso a regiões críticas cada tarefa terá um tempo quem que permanece bloqueada ($Bi$). Neste caso, utilizamos os algoritmos abaixo para verificar se o sistema é escalonável.
 
 ## Teste Approach First
 > #### $\frac{C1+B1}{T1} $
@@ -308,7 +310,7 @@ Quando implementamos um protocolo de segurança para o acesso a regiões crític
 > $R3^{2} = \left \lceil \frac{R3^{1}}{T1} \right \rceil C1 + \left \lceil \frac{R3^{1}}{T2} \right \rceil C2 + C3 + B3$
 
 # Multiprocessadores
-O escalonamento de tempo real para multicores ainda nao é muito utilizado pois, o barramento e a memória  principal são compartilhados entre os processadores. A solução é isolar todos os elementos compartilhados, mas isso exige um alto grau de complexidade. Atualmente o isolamento é feito via software pelo sistema operacional, mas é esperado que no futuro isso seja aplicado pelo hardware.
+O escalonamento de tempo real para multicores ainda não é muito utilizado pois, o barramento e a memória  principal são compartilhados entre os processadores. A solução é isolar todos os elementos compartilhados, mas isso exige um alto grau de complexidade. Atualmente o isolamento é feito via software pelo sistema operacional, mas é esperado que no futuro isso seja aplicado pelo hardware.
 
 ## Parcionado
 + Costuma ser o mais usual devido a maior previsibilidade. Cada processador escalona as tarefas como um uniprocessador.
