@@ -76,9 +76,9 @@ Em um escalonador não preeptivo a tarefa em execução não pode ser interrompi
 
 + **Teste de Utilização**
 	
-	+ > $Ub=\sum \frac{Ci}{Ti}$
-	+ > $Ub < n(2^{\frac{1}{n}}-1)$
 	+ > $\lim_{n \to \infty}\frac{Ci}{Ti} = Log(2) = 0.693$
+	+ > $Ub=\sum \frac{Ci}{Ti} < n(2^{1/n}-1)$
+
 + **Hyperbolic Bound**
 
 	+ > $\prod (Ui +1) < 2$
@@ -88,14 +88,17 @@ Em um escalonador não preeptivo a tarefa em execução não pode ser interrompi
 + **Teste de RTA** 
 	
 	+ Analisa a maior interferência que a tarefa pode sofrer pelo sistema
+	+ Este teste deve prosseguir  para cada tarefa até que Ri se repita e seja menor que Di
+	+ Há casos onde $Di=Ti$
+	+ $Ri = \sum \left \lceil \frac{Ri}{Tk} \right \rceil Ck + Ci \leq Di$
 	+ A propriedade de teto ( $\left \lceil \ X \right \rceil$ ), deve ser arredondado para o próximo número inteiro.
 	+ Ex: $\left \lceil \ 1,06 \right \rceil = 2$
-	> $R1^{0} = C1$
-	> $R2^{0} = C1 + C2$
-	> $R2^{1} = \left \lceil \frac{R2^{0}}{T1} \right \rceil C1 + C2$
-	> $R3^{0} = C1 + C2 + C3$
-	> $R3^{1} = \left \lceil \frac{R3^{0}}{T1} \right \rceil C1 + \left \lceil \frac{R3^{0}}{T2} \right \rceil C2 + C3$
-	> $R3^{2} = \left \lceil \frac{R3^{1}}{T1} \right \rceil C1 + \left \lceil \frac{R3^{1}}{T2} \right \rceil C2 + C3$
+	> $R1^{0} = C1 \leq D1$
+	> $R2^{0} = C1 + C2 \leq D2$
+	> $R2^{1} = \left \lceil \frac{R2^{0}}{T1} \right \rceil C1 + C2 \leq D2$
+	> $R3^{0} = C1 + C2 + C3 \leq D3$
+	> $R3^{1} = \left \lceil \frac{R3^{0}}{T1} \right \rceil C1 + \left \lceil \frac{R3^{0}}{T2} \right \rceil C2 + C3 \leq D3$
+	> $R3^{2} = \left \lceil \frac{R3^{1}}{T1} \right \rceil C1 + \left \lceil \frac{R3^{1}}{T2} \right \rceil C2 + C3 \leq D3$
 
 ### Necessário
 + O teste Necessário verifica em condições reais a escalonabilidade, pois há casos que o sistema é escalonável mas não há como provar.
@@ -261,6 +264,12 @@ Ferramentas necessárias para criar um executivo cíclico
 + Não impede **DEADLOCKS**
 + A prioridade só é aumentada durante a região crítica
 + Propriedade transitiva ( se t2 aumentar a prioridade, t3 também aumenta).
++ Regra de herança de prioridade
+	+ Quando a terefa tenta alocar o recurso R e fica bloqueado
+	+ O job Jx que detém o recurso R herda a prioridade efetiva de J
+	+ Jx mantém esta prioridade até o momento que libera o recurso R
+	+ Neste instante ele retorna para sua prioridade efetiva anterior
+	+ A herança de prioridade é transitiva
 + Possui prioridade Ativa e Nominal
 	+ Prioridade Ativa (p): definida durante a execução.
 	+ Prioridade Nominal (P): definida em tempo de projeto.
@@ -276,6 +285,7 @@ Ferramentas necessárias para criar um executivo cíclico
 + O Ceiling é conhecido antes de o programa começar a executar. É estático e nunca muda.
 + A prioridade tem que ser maior que a C, para receber a vez de execução.
 + Se $Pi\leq C(Sk)$  o acesso é negado.
++ A propriedade Ceiling faz com que cada tarefa seja bloqueada por no máximo uma vez
 + Assume-se que se sabe quais recursos cada tarefa precisa
 + Mesmo um recurso livre pode não ser alocado !!
   + Feito para prevenir um comportamento pior
@@ -300,17 +310,22 @@ Ferramentas necessárias para criar um executivo cíclico
 Quando implementamos um protocolo de segurança para o acesso a regiões críticas cada tarefa terá um tempo quem que permanece bloqueada ($Bi$). Neste caso, utilizamos os algoritmos abaixo para verificar se o sistema é escalonável.
 
 ## Teste Approach First
-> #### $\frac{C1+B1}{T1} $
-> #### $\frac{C1}{T1} + \frac{C2+B2}{T2} $
-> #### $\frac{C1}{T1} + \frac{C2}{T2} + \frac{C3+B3}{T3}$
+$\sum \frac{Ck}{Tk} +\frac{Bi}{Ti} \leq i(2^{1/i}-1) $
+> #### $\frac{C1+B1}{T1}  \leq 1(2^{1/1}-1) $
+> #### $\frac{C1}{T1} + \frac{C2+B2}{T2}  \leq 2(2^{1/2}-1) $
+> #### $\frac{C1}{T1} + \frac{C2}{T2} + \frac{C3+B3}{T3}  \leq 3(2^{1/3}-1)$
 
 ## Teste RTA
-> $R1^{0} = C1 + B1$
-> $R2^{0} = C1 + C2 + B2$
-> $R2^{1} = \left \lceil \frac{R2^{0}}{T1} \right \rceil C1 + C2 + B2$
-> $R3^{0} = C1 + C2 + C3 + B3$
-> $R3^{1} = \left \lceil \frac{R3^{0}}{T1} \right \rceil C1 + \left \lceil \frac{R3^{0}}{T2} \right \rceil C2 + C3 + B3$
-> $R3^{2} = \left \lceil \frac{R3^{1}}{T1} \right \rceil C1 + \left \lceil \frac{R3^{1}}{T2} \right \rceil C2 + C3 + B3$
+Este teste deve prosseguir  para cada tarefa até que Ri se repita e seja menor que Di
+Há casos onde $Di=Ti$
+$Ri = \sum \left \lceil \frac{Ri}{Tk} \right \rceil Ck + Ci + Bi \leq Di$
+
+> $R1^{0} = C1 + B1 \leq D1$
+> $R2^{0} = C1 + C2 + B2 \leq D2$
+> $R2^{1} = \left \lceil \frac{R2^{0}}{T1} \right \rceil C1 + C2 + B2 \leq D2$
+> $R3^{0} = C1 + C2 + C3 + B3 \leq D3$
+> $R3^{1} = \left \lceil \frac{R3^{0}}{T1} \right \rceil C1 + \left \lceil \frac{R3^{0}}{T2} \right \rceil C2 + C3 + B3 \leq D3$
+> $R3^{2} = \left \lceil \frac{R3^{1}}{T1} \right \rceil C1 + \left \lceil \frac{R3^{1}}{T2} \right \rceil C2 + C3 + B3 \leq D3$
 
 # Multiprocessadores
 O escalonamento de tempo real para multicores ainda não é muito utilizado pois, o barramento e a memória  principal são compartilhados entre os processadores. A solução é isolar todos os elementos compartilhados, mas isso exige um alto grau de complexidade. Atualmente o isolamento é feito via software pelo sistema operacional, mas é esperado que no futuro isso seja aplicado pelo hardware.
