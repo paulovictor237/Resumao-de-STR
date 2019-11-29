@@ -310,7 +310,7 @@ Ferramentas necessárias para criar um executivo cíclico
 Quando implementamos um protocolo de segurança para o acesso a regiões críticas cada tarefa terá um tempo quem que permanece bloqueada ($Bi$). Neste caso, utilizamos os algoritmos abaixo para verificar se o sistema é escalonável.
 
 ## Teste Approach First
-$\sum \frac{Ck}{Tk} +\frac{Bi}{Ti} \leq i(2^{1/i}-1) $
+$\sum \frac{Ck}{Tk} +\frac{Ci+Bi}{Ti} \leq n(2^{1/n}-1) $
 > #### $\frac{C1+B1}{T1}  \leq 1(2^{1/1}-1) $
 > #### $\frac{C1}{T1} + \frac{C2+B2}{T2}  \leq 2(2^{1/2}-1) $
 > #### $\frac{C1}{T1} + \frac{C2}{T2} + \frac{C3+B3}{T3}  \leq 3(2^{1/3}-1)$
