@@ -37,7 +37,7 @@ O que um **RTOS** deve garantir
 
 3. **Esporádicas**: 
 	+ Existe um tempo mínimo de chegada 
-	+ Período mínimo de execução é T = D
+	+ Período mínimo de chegada Ti = Di (pior caso de uma tarefa periódica)
 	+ O instante de chegada é conhecido
 
 ## Nomenclatura
@@ -77,7 +77,7 @@ Em um escalonador não preeptivo a tarefa em execução não pode ser interrompi
 + **Teste de Utilização**
 	
 	+ > $Ub=\sum \frac{Ci}{Ti}$
-	+ > $Ub < n(2^{-1}-1)$
+	+ > $Ub < n(2^{\frac{1}{n}}-1)$
 	+ > $\lim_{n \to \infty}\frac{Ci}{Ti} = Log(2) = 0.693$
 + **Hyperbolic Bound**
 
@@ -182,7 +182,7 @@ Ferramentas necessárias para criar um executivo cíclico
 + Prioridade inversamente proporcional ao deadline absoluto
 + A tarefas que estiver com seu deadline mais próximo de terminar é priorizada.
 + Não é utilizado em sistemas críticos, pois seu **comportamento é imprevisível**. Sistemas críticos utilizam RM, DM e Executivo cíclico.
-+ Ótimo em relação aos critérios de prioridade variáveis. Se o EDF não conseguir escalonar, nenhum outro alroítmo irá conseguir.
++ Ótimo em relação aos critérios de prioridade variáveis. Se o EDF não conseguir escalonar, nenhum outro algoritmo irá conseguir.
 + Teste suficiente $Ub=\sum \frac{Ci}{Ti} < 1$
 
 ### Least Slack Fisrt (LSF)
@@ -219,7 +219,8 @@ Ferramentas necessárias para criar um executivo cíclico
 + No pior caso a interferência do PS no sistema é igual a uma tarefa periódica
 + No período da chegada de uma tarefa aperiódica, mesmo que reste tempo para sua execução, ela só irá iniciar sua execução no próximo período.
 + Server Budget:  Recarga ocorre a cada período apenas se houver jobs aperiodicos.
-+ Teste de escalonabilidade : RTA ou  $Us\leq 2(\frac{Up}{n}+1)^{-n}-1$
++ Máxima utilização do servidor para o sistema ser escalonável
+  + $U_{PS}\leq 2(\frac{Up}{n}+1)^{-n}-1$
 
 ## Deferable Server (DS)
 + Possui um período $ Ti$ e um tempo de execução $Ci$ (Carga do Budget), normalmente com maior prioridade.
@@ -227,7 +228,8 @@ Ferramentas necessárias para criar um executivo cíclico
   + Nem sempre executa no seu tempo de chegada mesmo com maior prioridade
 + A tarefa é iniciada imediatamente dentro do período em que ocorreu.
 + Server Budget:  Recarga ocorre a cada período, mesmo quando não existem jobs aperiódicos.
-+ Teste de escalonabilidade : RTA ou  $Us\leq  \frac{2-k}{2k-1}$ e $K=(\frac{Up}{n}+1)^{n}$
++ Máxima utilização do servidor para o sistema ser escalonável
+  +   $U_{DS}\leq  \frac{2-k}{2k-1}$ e $K=(\frac{Up}{n}+1)^{n}$
 
 ## Sporadic Server (SS)
 + O teste de garantia é o mesmo do PS
@@ -236,8 +238,9 @@ Ferramentas necessárias para criar um executivo cíclico
 + Preserva a capacidade e difere na forma como é feita a recarga
 + Para determinar a Recarga são feitas duas perguntas 
   + $(RT)$ Quando? :  A recarga ocorre em $RT=Ti+Ts$  e $Ts$ é onde a tarefa foi iniciada.
-  + $(RA)$ Quanto? :   A recarga fornecida é a mesma utilizada pela tarefa até sua conclusão.
-+ Teste de escalonabilidade : RTA ou  $Us\leq 2(\frac{Up}{n}+1)^{-n}-1$
+  + $(RA)$ Quanto? :   A recarga fornecida é a mesma consumida pela tarefa dentro do período ativado.
++ Máxima utilização do servidor para o sistema ser escalonável
+  +  $U_{SS}\leq 2(\frac{Up}{n}+1)^{-n}-1$
 
 # Acesso a Sessões críticas
 
