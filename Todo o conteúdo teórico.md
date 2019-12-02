@@ -259,7 +259,7 @@ Ferramentas necessárias para criar um executivo cíclico
 + Outro problema do NPP é que para ser implementado é necessário desabilitar as interrupções. Neste caso não há como tarefas de maior prioridade preeptarem o processo durante um acesso a região crítica.
 
 ## Priority inheritance Protocol (PIP)
-+ Herança de prioridade. A tarefa de maior prioridade herda a de maior prioridade
++ Herança de prioridade. A tarefa de menor prioridade herda a de maior prioridade
 + A inversão de prioridade descontrolada é evitada.
 + Não impede **DEADLOCKS**
 + A prioridade só é aumentada durante a região crítica
@@ -330,7 +330,7 @@ $Ri = \sum \left \lceil \frac{Ri}{Tk} \right \rceil Ck + Ci + Bi \leq Di$
 # Multiprocessadores
 O escalonamento de tempo real para multicores ainda não é muito utilizado pois, o barramento e a memória  principal são compartilhados entre os processadores. A solução é isolar todos os elementos compartilhados, mas isso exige um alto grau de complexidade. Atualmente o isolamento é feito via software pelo sistema operacional, mas é esperado que no futuro isso seja aplicado pelo hardware.
 
-## Parcionado
+## Particionado
 + Costuma ser o mais usual devido a maior previsibilidade. Cada processador escalona as tarefas como um uniprocessador.
 + Cada Processador tem seu próprio algoritmo de escalonamento (P-RM, P-DM, P-EDF)
 + Cada processador possui uma fila própria
@@ -364,8 +364,8 @@ O escalonamento de tempo real para multicores ainda não é muito utilizado pois
 
 + Fila única com um algoritmo de escalonamento (G-RM, G-DM, G-EDF)
 + Troca a tarefa de menor prioridade para executar uma de maior
-+ Migração: Uma tarefa de menor prioridade preeptada pode migrar para outro processador
-+ A Migração causa atrasos em relação a afinidade na cash
++ Migração: Uma tarefa de menor prioridade preemptada pode migrar para outro processador
++ A Migração causa atrasos em relação a afinidade na cache
 
 ```plain
 ╔══════════════════════════════════════╗
