@@ -146,8 +146,9 @@ Só funciona para tarefas periódicas e análise off-line.
 
 Ferramentas necessárias para criar um executivo cíclico
 1. Interrupção
-2. Laço FOR
-3. Defines do minor e major cycle
+2. Timer
+3. Laço FOR
+4. Defines do minor e major cycle
 
 | Vantagens                             | Desvantagens                                                 |
 | ------------------------------------- | ------------------------------------------------------------ |
