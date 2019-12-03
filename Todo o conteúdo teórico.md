@@ -32,18 +32,18 @@ O que um **RTOS** deve garantir
 	
 2. **Periódicas**: 
 	+ Todas devem ser executadas
-	+ A tarefa é ativada a cada P unidades de tempo 
+	+ A tarefa é ativada a cada $Ti $ unidades de tempo 
 	+ O instante de chegada pode ser calculado a partir do início
 
 3. **Esporádicas**: 
 	+ Existe um tempo mínimo de chegada 
-	+ Período mínimo de chegada Ti = Di (pior caso de uma tarefa periódica)
+	+ Período mínimo de chegada $Ti = Di $ (pior caso de uma tarefa periódica)
 	+ O instante de chegada é conhecido
 
 ## Nomenclatura
 
 ### Especificados pelo programa
-1. $Ci$ - Tempo de computação
+1. $Ci$: Tempo de computação
 3. $Ti$: Período para a execução
 4. $Di$: Deadline Relativo
 
@@ -52,8 +52,8 @@ O que um **RTOS** deve garantir
 2. $si$: start time
 3. $fi$: finish time
 4. $ri$: tempo de resposta
-5. $Slack$: tempo de sobra entre fi e di
-6. $Lateness$: tempo de atraso entre fi e di
+5. $Slack$: tempo de sobra entre $fi$ e $di$
+6. $Lateness$: tempo de atraso entre $fi$ e $di$
 7. $Jitter$: tempo perdido para a troca de contexto entre uma saída de tarefa em execução e o início da outra
    
 ### Deadlines
@@ -66,8 +66,7 @@ Tempo de atraso ( + Slack) = $fi-di$
 Tempo de atraso ( - Lateness) = $fi-di$
 
 ## Definição de preemptivo e não preemptivo
-Um escalonador é considerado preemptivel se a execução de uma tarefa pode ser arbitrariamente suspensa a qualquer momento para atribuir a CPU à outra tarefa.
-Em um escalonador não preeptivo a tarefa em execução não pode ser interrompida até que esteja concluída.
+Um escalonador é considerado preemptivel se a execução de uma tarefa pode ser arbitrariamente suspensa a qualquer momento para atribuir a CPU à outra tarefa. Em um escalonador não preeptivo a tarefa em execução não pode ser interrompida até que esteja concluída.
 
 ## Testes
 
@@ -88,6 +87,7 @@ Em um escalonador não preeptivo a tarefa em execução não pode ser interrompi
 + **Teste de RTA** 
 	
 	+ Analisa a maior interferência que a tarefa pode sofrer pelo sistema
+	+ A ordem de chegada das tarefas deve seguir a escolha do escalonador em teste
 	+ Este teste deve prosseguir  para cada tarefa até que Ri se repita e seja menor que Di
 	+ Há casos onde $Di=Ti$
 	+ $Ri = \sum \left \lceil \frac{Ri}{Tk} \right \rceil Ck + Ci \leq Di$
@@ -176,9 +176,11 @@ Ferramentas necessárias para criar um executivo cíclico
 
 ### Deadline Monotonic (DM)
 + Prioridade mais alta para a tarefa com o menor deadline relativo $(Di)$
-+ Quanto menor o deadline, maior a prioridade.
 + Prioridade fixa
++ Quanto menor o deadline, maior a prioridade.
 + Igual o RM quando $Ti=Di$
++ Teste suficiente (Utilização e Hyperbolic Bound)
++ Teste exato (RTA)
 
 ## Abordagens de prioridade dinâmica (Dynamic Priority )
 
@@ -195,27 +197,25 @@ Ferramentas necessárias para criar um executivo cíclico
 + Overhead maior que EDF
 + Para tarefas em execução a prioridade se mantém
 + Tarefas em Ready aumentam a prioridade
-+ 
 ## RM x EDF
 + RM é previsível.
 + RM é mais fácil de implementar, basta fixar prioridades. O EDF precisa recalcular a prioridade durante a execução.
 + Se o sistema está sobrecarregado, o RM garante que as tarefas de maior prioridade serão pouco afetadas.
-+ Há mais testes de análise necessária
-+ Melhor de entender se algo der errado (Ex: Overloads)
++ Há mais testes de análise necessária para o RM
++ O RM é melhor para identificar o motivo na ocorrência de erros (Ex: Overloads)
 
 ---
 
 # Servidores Aperiódicos
 1. Sempre deve ser garantido os deadlines
-2. O que sobra é fornecido aos servidores Aperiódicos
+2. O que sobra é fornecido aos Servidores Aperiódicos
 3. Os jobs aperiódicos são executados em fila pelo servidor
-4. Duas filas de processos no escalonador ( Periodicas e Aperiodicas )
+4. Duas filas de processos no escalonador ( Periódicas e Aperiódicas )
 
 ## Background Server (BS)
-+ Só permite a execução de tarefas aperiodicas se não houver nenhuma outra tarefa periódica em execução. Opera em espaços livres.
++ Só permite a execução de tarefas aperiódicas se não houver nenhuma outra tarefa periódica em execução. Opera em espaços livres.
 + Executa enquanto o processador estiver em idle
-+ Apenas para tarefas aperiodicas sem restrição de tempo.
-+ Teste de escalonabilidade : RTA
++ Apenas para tarefas aperiódicas sem restrição de tempo.
 
 ## Poolling Server (PS)
 + O comportamento da tarefa servidor é igual a uma periódica
@@ -347,7 +347,7 @@ O escalonamento de tempo real para multicores ainda não é muito utilizado pois
 
 ```plain
 ╔══════════════════════════════════════╗
-║              Parcionado              ║
+║             Particionado             ║
 ╠═════════════════════╦════════════════╣
 ║      Em projeto     ║    Execução    ║
 ╠═════════╦═══════════╬════════════════╣
