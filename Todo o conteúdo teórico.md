@@ -1,5 +1,41 @@
 # Sistemas de tempo real (STR)
 
+[TOC]
+
+## Read Me
+
+Criei esse documento para servir como um guia completo da teoria estudada nas aulas de Sistemas de tempo real. A idéia não é ser um Resumão, e sim, abordar cada detalhe para a compreensão do assunto.
+
+O estudo deve ser complementado com a lista de exercícios do Butazzo e os exemplos dos Slides do professor. Capítulos recomendados: 2, 4, 5 e 7.
+
+O arquivo "Todo o conteúdo teórico.md" foi feito com Markdow, um dos melhores programas para fazer a leitura desse tipo de arquivo é o Typora, nele você pode ativar para interagir com as formulas criadas em LaTeX. Ou, também é possível exportar para PDF. 
+
+**Copyright &copy; 2019, Paulo Victor Duarte, All rights reserved.**
+
+# Formulário
+
+## Testes
+
+Teste Suficiente:  $Ub=\sum \frac{Ci}{Ti} < n(2^{1/n}-1)$
+
+Teste Hyperbolic Bound: $\prod (Ui +1) < 2$
+
+Teste Exato: $Ri = \sum \left \lceil \frac{Ri}{Tk} \right \rceil Ck + Ci \leq Di$
+
+## Testes com Bi
+
+Teste Approach-First: $\sum \frac{Ck}{Tk} +\frac{Ci+Bi}{Ti} \leq n(2^{1/n}-1) $
+
+Teste RTA: $Ri = \sum \left \lceil \frac{Ri}{Tk} \right \rceil Ck + Ci + Bi \leq Di$
+
+## Utilização dos Protocolos Aperiódicos
+
+Utilização por PS: $U_{PS}\leq 2(\frac{Up}{n}+1)^{-n}-1$
+
+Utilização por DS: $U_{DS}\leq  \frac{2-k}{2k-1}$ e $K=(\frac{Up}{n}+1)^{n}$
+
+Utilização por SS: $U_{SS}\leq 2(\frac{Up}{n}+1)^{-n}-1$
+
 # Introdução
 
 ## Real Time Operating System 
