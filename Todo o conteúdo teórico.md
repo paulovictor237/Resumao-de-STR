@@ -29,16 +29,16 @@ O que um **RTOS** deve garantir
 1. **Aperiódicas**: 
 	+ Não há regras para o tempo de execução
 	+  Nada se sabe sobre a ativação das tarefas
-	
+
 2. **Periódicas**: 
 	+ Todas devem ser executadas
 	+ A tarefa é ativada a cada $Ti $ unidades de tempo 
 	+ O instante de chegada pode ser calculado a partir do início
 
 3. **Esporádicas**: 
-	+ Existe um tempo mínimo de chegada 
-	+ Período mínimo de chegada $Ti = Di $ (pior caso de uma tarefa periódica)
-	+ O instante de chegada é conhecido
+	+ Instantes de chegada não são conhecidos
+	+ Existe um intervalo mínimo de tempo entre chegadas 
+	+ É uma tarefa aperiódica que se comporta como o pior caso de uma tarefa periódica
 
 ## Nomenclatura
 
@@ -103,7 +103,20 @@ Um escalonador é considerado preemptivel se a execução de uma tarefa pode ser
 ### Necessário
 + O teste Necessário verifica em condições reais a escalonabilidade, pois há casos que o sistema é escalonável mas não há como provar.
 
+## Conceitos importantes
+
+**Static**: Prioridades estáticas são determinadas em projeto e nunca mudam.
+
+**Dynamic**: Priodidades dinâmicas mudam em tempo de execução.
+
+**Off-line**: Um escalonador off-line tem pré determinado o tempo de chegada de cada tarefa em projeto.
+
+**On-line**: Um escalonador on-line tem o comportamento imprevisível de chegada das tarefas e escalona as mesmas durante a execução.
+
+**Optimal**: Um algoritimo de escalonamento é dado como ótimo se atende o melhor cenário em que está sendo feito o teste.
+
 ## Escalonadores de tempo real
+
 + Best effort
 + Dynamic Guarantees
 + Desing-time guarantees
